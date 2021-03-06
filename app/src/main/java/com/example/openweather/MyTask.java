@@ -1,5 +1,6 @@
 package com.example.openweather;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +43,6 @@ public class MyTask extends AsyncTask<String, Void, String> {
             }
         }  catch (Exception e){
             output.setText("Dados fornecidos incorretos!");
-            e.printStackTrace();
         }
         return buffer.toString();
     }
@@ -61,21 +61,30 @@ public class MyTask extends AsyncTask<String, Void, String> {
         try {
             JSONObject jsonObject = new JSONObject(s);
             JSONObject temp = jsonObject.getJSONObject("main");
-//            JSONObject temp2 = jsonObject.getJSONObject("rain");
             temperatura = temp.getString("temp");
             minima = temp.getString("temp_min");
             maxima = temp.getString("temp_max");
             umidade = temp.getString("humidity");
-//            chuva = temp2.getString("1h");
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        try{
+            JSONObject jsonObject = new JSONObject(s);
+            JSONObject temp2 = jsonObject.getJSONObject("rain");
+            chuva = temp2.getString("1h") + " %";
+
+        } catch (JSONException e) {
+            chuva = "Não informado";
+            e.printStackTrace();
+        }
+
         output.setText("Temperatura: " + temperatura + " ºC" +
                        "\nMínima: " + minima + " ºC" +
                        "\nMáxima: " + maxima + " ºC" +
-                       "\nUmidade: " + umidade + " %"
-//                       "\nChuva: " + chuva + " %"
+                       "\nUmidade: " + umidade + " %" +
+                       "\nChuva: " + chuva
         );
     }
 
